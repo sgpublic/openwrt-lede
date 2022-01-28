@@ -1,44 +1,37 @@
-**English** | [中文](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
+# Actions-OpenWrt-k2p
 
-# Actions-OpenWrt
+## 使用源码
 
-[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](https://github.com/P3TERX/Actions-OpenWrt/blob/master/LICENSE)
-![GitHub Stars](https://img.shields.io/github/stars/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Stars&logo=github)
-![GitHub Forks](https://img.shields.io/github/forks/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Forks&logo=github)
++ Build OpenWrt：[git.openwrt.org Git - openwrt/openwrt.git/summary](https://git.openwrt.org/openwrt/openwrt.git)
 
-A template for building OpenWrt with GitHub Actions
+## 插件源
 
-## Usage
++ [kenzok8/small-package: 自动同步更新上游库软件 (github.com)](https://github.com/kenzok8/small-package)
 
-- Click the [Use this template](https://github.com/P3TERX/Actions-OpenWrt/generate) button to create a new repository.
-- Generate `.config` files using [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) source code. ( You can change it through environment variables in the workflow file. )
-- Push `.config` file to the GitHub repository.
-- Select `Build OpenWrt` on the Actions page.
-- Click the `Run workflow` button.
-- When the build is complete, click the `Artifacts` button in the upper right corner of the Actions page to download the binaries.
+## 主题
 
-## Tips
+[jerrykuku/luci-theme-argon: Argon is a clean HTML5 theme for OpenWrt LuCI. Users may setup their own favorite logins, including beautiful pics and customized mp4 videos. (github.com)](https://github.com/jerrykuku/luci-theme-argon)
 
-- It may take a long time to create a `.config` file and build the OpenWrt firmware. Thus, before create repository to build your own firmware, you may check out if others have already built it which meet your needs by simply [search `Actions-Openwrt` in GitHub](https://github.com/search?q=Actions-openwrt).
-- Add some meta info of your built firmware (such as firmware architecture and installed packages) to your repository introduction, this will save others' time.
+![screenshot_pc.jpg (1767×938) (raw.githubusercontent.com)](https://raw.githubusercontent.com/jerrykuku/luci-theme-argon/master/Screenshots/screenshot_pc.jpg)
 
-## Credits
+## 插件
 
-- [Microsoft Azure](https://azure.microsoft.com)
-- [GitHub Actions](https://github.com/features/actions)
-- [OpenWrt](https://github.com/openwrt/openwrt)
-- [Lean's OpenWrt](https://github.com/coolsnowwolf/lede)
-- [tmate](https://github.com/tmate-io/tmate)
-- [mxschmitt/action-tmate](https://github.com/mxschmitt/action-tmate)
-- [csexton/debugger-action](https://github.com/csexton/debugger-action)
-- [Cowtransfer](https://cowtransfer.com)
-- [WeTransfer](https://wetransfer.com/)
-- [Mikubill/transfer](https://github.com/Mikubill/transfer)
-- [softprops/action-gh-release](https://github.com/softprops/action-gh-release)
-- [ActionsRML/delete-workflow-runs](https://github.com/ActionsRML/delete-workflow-runs)
-- [dev-drprasad/delete-older-releases](https://github.com/dev-drprasad/delete-older-releases)
-- [peter-evans/repository-dispatch](https://github.com/peter-evans/repository-dispatch)
++ [luci-app-wolplus (网络唤醒+)](https://github.com/kenzok8/small-package/tree/main/luci-app-wolplus)
++ [luci-app-ramfree (释放内存)](https://github.com/kenzok8/small-package/tree/main/luci-app-ramfree)
++ [luci-app-nlbwmon (网络带宽监控)](https://git.openwrt.org/?p=project/luci.git;a=tree;f=applications/luci-app-nlbwmon;h=7bfd65f09041fe22a63a930d0bfb22529b172c73;hb=HEAD)
++ [luci-app-arpbind (IP/MAC 绑定)](https://github.com/coolsnowwolf/lede/tree/main/luci-app-arpbind)
++ [luci-app-easyupdate (简易更新)](https://github.com/kenzok8/small-package/tree/main/luci-app-easyupdate)
++ [luci-app-ssr-plus (魔法 Plus+)](https://github.com/kenzok8/small-package/tree/main/luci-app-ssr-plus)
++ [luci-app-autoreboot (自动重启)](https://github.com/kenzok8/small-package/tree/main/luci-app-autoreboot)
 
-## License
+## 管理页
 
-[MIT](https://github.com/P3TERX/Actions-OpenWrt/blob/main/LICENSE) © [**P3TERX**](https://p3terx.com)
+默认地址：`192.168.6.1`
+
+默认密码：`password`
+
+## 下载
+
+每周六凌晨 3 点触发云编译
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/SGPublic/k2p-lede?style=for-the-badge&label=Download)](https://github.com/SGPublic/k2p-lede/releases/latest)
