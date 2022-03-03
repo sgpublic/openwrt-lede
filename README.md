@@ -6,7 +6,8 @@
 
 ## 插件源
 
-+ [kenzok8/small-package: 自动同步更新上游库软件 (github.com)](https://github.com/kenzok8/small-package)
++ [sundaqiang/openwrt-packages (github.com)](https://github.com/sundaqiang/openwrt-packages)
++ [fw876/helloworld (github.com)](https://github.com/fw876/helloworld)
 
 ## 主题
 
@@ -16,13 +17,10 @@
 
 ## 插件
 
-+ [luci-app-wolplus (网络唤醒+)](https://github.com/kenzok8/small-package/tree/main/luci-app-wolplus)
-+ [luci-app-ramfree (释放内存)](https://github.com/kenzok8/small-package/tree/main/luci-app-ramfree)
-+ [luci-app-nlbwmon (网络带宽监控)](https://git.openwrt.org/?p=project/luci.git;a=tree;f=applications/luci-app-nlbwmon;h=7bfd65f09041fe22a63a930d0bfb22529b172c73;hb=HEAD)
-+ [luci-app-arpbind (IP/MAC 绑定)](https://github.com/coolsnowwolf/lede/tree/main/luci-app-arpbind)
-+ [luci-app-easyupdate (简易更新)](https://github.com/kenzok8/small-package/tree/main/luci-app-easyupdate)
-+ [luci-app-ssr-plus (魔法 Plus+)](https://github.com/kenzok8/small-package/tree/main/luci-app-ssr-plus)
-+ [luci-app-autoreboot (自动重启)](https://github.com/kenzok8/small-package/tree/main/luci-app-autoreboot)
++ [luci-app-wolplus (网络唤醒+)](https://github.com/sundaqiang/openwrt-packages/tree/master/luci-app-wolplus)
++ [luci-app-arpbind (IP/MAC 绑定)](https://github.com/coolsnowwolf/luci/tree/master/applications/luci-app-arpbind)
++ [luci-app-easyupdate (简易更新)](https://github.com/sundaqiang/openwrt-packages/tree/master/luci-app-easyupdate)
++ [luci-app-ssr-plus (魔法 Plus+)](https://github.com/fw876/helloworld/tree/master/luci-app-ssr-plus)
 
 ## 管理页
 

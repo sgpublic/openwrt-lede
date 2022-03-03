@@ -9,6 +9,15 @@ uci set system.@system[0].timezone=CST-8
 uci set system.@system[0].zonename=Asia/Shanghai
 uci commit system
 
+# 解决 daemon.err nlbwmon[2083]: Netlink receive failure: Out of memory
+sed -i '/net.core.rmem_max/d' /etc/sysctl.conf
+echo 'net.core.rmem_max=524288' >> /etc/sysctl.conf
+sed -i '/net.core.rmem_default/d' /etc/sysctl.conf
+echo 'net.core.rmem_default=524288' >> /etc/sysctl.conf
+sysctl -p
+uci set nlbwmon.@nlbwmon[0].database_limit=5000
+uci commit nlbwmon
+
 # 启用 WiFi
 sed -i '/option disabled/d' /etc/config/wireless
 sed -i '/set wireless.radio${devidx}.disabled/d' /lib/wifi/mac80211.sh
