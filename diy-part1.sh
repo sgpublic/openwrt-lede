@@ -10,41 +10,44 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #
 set -e
-
-# 添加软件源 kenzok8/small-package
-sed -i "/helloworld/d" feeds.conf.default
-echo 'src-git-full helloworld https://github.com/fw876/helloworld.git' >> feeds.conf.default
-sed -i "/sundaqiang/d" feeds.conf.default
-echo 'src-git-full sundaqiang https://github.com/sundaqiang/openwrt-packages.git' >> feeds.conf.default
-
 if [ "$1" == "--local" ]; then
   set -v
-  # 本地拉取依赖
-  cp -r /mnt/e/Documents/Github/k2p-lede/sgpublic/* ./
-else
-  # 拉取 default-settings
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/package/default-settings package/default-settings
-
-  # 为 luci-app-ssr-plus 拉取 ucl 和 upx
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/tools/ucl tools/ucl
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/tools/upx tools/upx
-  # 为 luci-app-ssr-plus 拉取依赖
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/package/net/dns2socks package/net/dns2socks
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/package/net/microsocks package/net/microsocks
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/package/net/ipt2socks package/net/ipt2socks
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/package/net/pdnsd-alt package/net/pdnsd-alt
-  svn co https://github.com/SGPublic/k2p-lede/trunk/sgpublic/package/net/redsocks2 package/net/redsocks2
 fi
 
+rm -f feeds.conf
+cp feeds.conf.default feeds.conf
+
+# 添加软件源 fw876/helloworld
+sed -i "/helloworld/d" feeds.conf.default
+echo 'src-git-full helloworld https://github.com/fw876/helloworld.git' >> feeds.conf
+# 添加软件源 sundaqiang/openwrt-packages
+sed -i "/sundaqiang/d" feeds.conf.default
+echo 'src-git-full sundaqiang https://github.com/sgpublic/openwrt-packages-sundaqiang.git' >> feeds.conf
+
+if [ "$1" == "--local" ]; then
+  # 本地拉取依赖
+  cp -r /mnt/e/Documents/Github/openwrt-lede/sgpublic/* ./
+else
+  # 拉取 default-settings
+  svn co https://github.com/SGPublic/openwrt-lede/trunk/sgpublic/package/default-settings package/default-settings
+
+  # 为 luci-app-ssr-plus 拉取依赖
+  svn co https://github.com/SGPublic/openwrt-lede/trunk/sgpublic/tools tools
+  svn co https://github.com/SGPublic/openwrt-lede/trunk/sgpublic/package/net package/net
+fi
+
+# 拉取主题 luci-theme-argon
+rm -rf package/jerrykuku/luci-theme-argon
+svn co https://github.com/jerrykuku/luci-theme-argon/trunk package/jerrykuku/luci-theme-argon
+# 拉取插件 luci-app-argon-config
+rm -rf package/jerrykuku/luci-app-argon-config
+svn co https://github.com/jerrykuku/luci-app-argon-config/trunk package/jerrykuku/luci-app-argon-config
+
 # 拉取插件 luci-app-arpbind
+rm -rf package/lean/luci-app-arpbind
 svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-arpbind package/lean/luci-app-arpbind
 sed -i "s/include ..\/..\/luci.mk/include \$(TOPDIR)\/feeds\/luci\/luci.mk/g" package/lean/luci-app-arpbind/Makefile
 
-# 拉取闭源驱动 mt7615_dhcp
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/mt/drivers/mt7615d package/mt/mt7615d
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/mt/drivers/mt_wifi package/mt/mt_wifi
-
-# 拉取主题 luci-theme-argon
-svn co https://github.com/jerrykuku/luci-theme-argon/trunk package/jerrykuku/luci-theme-argon
-# 拉取插件 luci-app-argon-config
-svn co https://github.com/jerrykuku/luci-app-argon-config/trunk package/jerrykuku/luci-app-argon-config
+# 拉取插件 luci-app-filebrowser
+rm -rf package/xiaozhuai/luci-app-filebrowser
+svn co https://github.com/xiaozhuai/luci-app-filebrowser/trunk package/xiaozhuai/luci-app-filebrowser

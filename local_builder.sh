@@ -39,6 +39,14 @@ main() {
     execute "sudo apt-get clean"
   fi
 
+  if [ -d 'openwrt.bak' ]; then
+    comfirm "Do you want to use cache? If you select No, the cache will be deleted. (Y/n)"
+    read _need
+    if [[ "$_need" =~ ^[nN]$ ]]; then
+      execute "rm -rf openwrt.bak"
+    fi
+  fi
+
   for _element in ${_STEP_STACK[@]}; do
     $_element
   done
@@ -46,13 +54,13 @@ main() {
 
 REPO_URL='https://git.openwrt.org/openwrt/openwrt.git'
 REPO_BRANCH='master'
-GITHUB_REPOSITORY='SGPublic/k2p-lede'
+GITHUB_REPOSITORY='SGPublic/openwrt-lede'
 GITHUB_ACTOR='SGPublic'
-CONFIG_FILE='/mnt/e/Documents/GitHub/k2p-lede/origin.config'
-DIY_P1_SH='/mnt/e/Documents/GitHub/k2p-lede/diy-part1.sh'
-DIY_P2_SH='/mnt/e/Documents/GitHub/k2p-lede/diy-part2.sh'
+CONFIG_FILE='/mnt/e/Documents/GitHub/openwrt-lede/origin.config'
+DIY_P1_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part1.sh'
+DIY_P2_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part2.sh'
 THREAD=12
-OUTPUT_DIR='/mnt/e/Documents/GitHub/k2p-lede/local'
+OUTPUT_DIR='/mnt/e/Documents/GitHub/openwrt-lede/local'
 
 _STEP_CURRENT=0
 print_step() {
@@ -65,14 +73,11 @@ Clone_Source_Code() {
   execute "rm -rf openwrt"
 
   if [ ! -d 'openwrt.bak' ]; then
-    execute "git clone $REPO_URL -b $REPO_BRANCH openwrt"
-    execute "cp -r openwrt openwrt.bak"
-    execute "cd openwrt"
+    execute "git clone $REPO_URL -b $REPO_BRANCH openwrt.bak"
+    execute "cd openwrt.bak"
   else
     execute "cd openwrt.bak"
     execute "git pull"
-    execute "cp -r ../openwrt.bak ../openwrt"
-    execute "cd ../openwrt"
   fi
 }
 
@@ -84,6 +89,8 @@ Load_Custom_Feeds() {
 Update_Feeds() {
   print_step 'Update feeds'
   execute "./scripts/feeds update -a"
+  execute "cp -r ../openwrt.bak ../openwrt"
+  execute "cd ../openwrt"
 }
 
 Install_Feeds() {
@@ -129,8 +136,10 @@ Download_Package() {
   execute "cp ./.config $OUTPUT_DIR/"
   runing "make download -j$THREAD || make download -j1 || make download -j1 V=s"
   make download -j$THREAD || make download -j1 || make download -j1 V=s
-  execute "find dl -size -1024c -exec ls -l {} \;"
-  execute "find dl -size -1024c -exec rm -f {} \;"
+  runing "find dl -size -1024c -exec ls -l {} \;"
+  find dl -size -1024c -exec ls -l {} \;
+  runing "find dl -size -1024c -exec rm -f {} \;"
+  find dl -size -1024c -exec rm -f {} \;
 }
 
 Compile_The_Firmware() {

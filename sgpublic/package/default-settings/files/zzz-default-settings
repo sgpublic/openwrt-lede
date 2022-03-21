@@ -18,6 +18,16 @@ sysctl -p
 uci set nlbwmon.@nlbwmon[0].database_limit=5000
 uci commit nlbwmon
 
+# 设置 ttyd 启用 ssl
+uci set ttyd.@ttyd[0].ssl=1
+uci set ttyd.@ttyd[0].ssl_cert=/etc/nginx/conf.d/_lan.crt
+uci set ttyd.@ttyd[0].ssl_key=/etc/nginx/conf.d/_lan.key
+uci commit ttyd
+
+# 修改 argon 主题配置
+uci set argon.@global[0].mode=light
+uci set argon.@global[0].bing_background=1
+
 # 启用 WiFi
 sed -i '/option disabled/d' /etc/config/wireless
 sed -i '/set wireless.radio${devidx}.disabled/d' /lib/wifi/mac80211.sh

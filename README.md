@@ -1,8 +1,12 @@
-# Actions-OpenWrt-k2p
+# Actions-OpenWrt
 
 ## 使用源码
 
 + Build OpenWrt：[git.openwrt.org Git - openwrt/openwrt.git/summary](https://git.openwrt.org/openwrt/openwrt.git)
+
+## 适用于
+
++ x86_64
 
 ## 插件源
 
@@ -17,10 +21,23 @@
 
 ## 插件
 
-+ [luci-app-wolplus (网络唤醒+)](https://github.com/sundaqiang/openwrt-packages/tree/master/luci-app-wolplus)
-+ [luci-app-arpbind (IP/MAC 绑定)](https://github.com/coolsnowwolf/luci/tree/master/applications/luci-app-arpbind)
-+ [luci-app-easyupdate (简易更新)](https://github.com/sundaqiang/openwrt-packages/tree/master/luci-app-easyupdate)
-+ [luci-app-ssr-plus (魔法 Plus+)](https://github.com/fw876/helloworld/tree/master/luci-app-ssr-plus)
++ luci-app-wolplus
++ luci-app-advanced-reboot
++ luci-app-arpbind
++ luci-app-nginx-manager
++ luci-app-nlbwmon
++ luci-app-samba4
++ luci-app-ttyd
++ rclone-ng
++ luci-app-ssr-plus
+  + NaiveProxy
+  + Shadowsocks_Libev_Client
+  + Shadowsocks_Libev_Server
+  + ShadowsocksR_Libev_Client
+  + ShadowsocksR_Libev_Server
+  + Simple_Obfs
+  + V2ray_Plugin
+  + Xray
 
 ## 管理页
 
