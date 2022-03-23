@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+REPO_URL='https://git.openwrt.org/openwrt/openwrt.git'
+REPO_BRANCH='v21.02.2'
+GITHUB_REPOSITORY='SGPublic/openwrt-lede'
+GITHUB_ACTOR='SGPublic'
+CONFIG_FILE='/mnt/e/Documents/GitHub/openwrt-lede/origin.config'
+DIY_P1_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part1.sh'
+DIY_P2_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part2.sh'
+THREAD=12
+OUTPUT_DIR='/mnt/e/Documents/GitHub/openwrt-lede/local'
+
 declare -a _STEP_STACK=(
   Clone_Source_Code
   Load_Custom_Feeds
@@ -51,16 +61,6 @@ main() {
     $_element
   done
 }
-
-REPO_URL='https://git.openwrt.org/openwrt/openwrt.git'
-REPO_BRANCH='master'
-GITHUB_REPOSITORY='SGPublic/openwrt-lede'
-GITHUB_ACTOR='SGPublic'
-CONFIG_FILE='/mnt/e/Documents/GitHub/openwrt-lede/origin.config'
-DIY_P1_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part1.sh'
-DIY_P2_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part2.sh'
-THREAD=12
-OUTPUT_DIR='/mnt/e/Documents/GitHub/openwrt-lede/local'
 
 _STEP_CURRENT=0
 print_step() {

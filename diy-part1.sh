@@ -29,11 +29,11 @@ if [ "$1" == "--local" ]; then
   cp -r /mnt/e/Documents/Github/openwrt-lede/sgpublic/* ./
 else
   # 拉取 default-settings
-  svn co https://github.com/SGPublic/openwrt-lede/trunk/sgpublic/package/default-settings package/default-settings
+  svn co https://github.com/sgpublic/openwrt-lede/trunk/sgpublic/package/default-settings package/default-settings
 
   # 为 luci-app-ssr-plus 拉取依赖
-  svn co https://github.com/SGPublic/openwrt-lede/trunk/sgpublic/tools tools
-  svn co https://github.com/SGPublic/openwrt-lede/trunk/sgpublic/package/net package/net
+  svn co https://github.com/sgpublic/openwrt-lede/trunk/sgpublic/tools tools
+  svn co https://github.com/sgpublic/openwrt-lede/trunk/sgpublic/package/net package/net
 fi
 
 # 拉取主题 luci-theme-argon
@@ -50,4 +50,8 @@ sed -i "s/include ..\/..\/luci.mk/include \$(TOPDIR)\/feeds\/luci\/luci.mk/g" pa
 
 # 拉取插件 luci-app-filebrowser
 rm -rf package/xiaozhuai/luci-app-filebrowser
-svn co https://github.com/xiaozhuai/luci-app-filebrowser/trunk package/xiaozhuai/luci-app-filebrowser
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser package/Lienol/luci-app-filebrowser
+
+# 拉取插件 luci-app-openclash
+rm -rf package/vernesong/luci-app-openclash
+svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/vernesong/luci-app-openclash

@@ -30,7 +30,3 @@ sed -i '/tools-y += ucl upx/d' tools/Makefile
 sed -i '/tools-y :=/a\tools-y += ucl upx' tools/Makefile
 sed -i "/\$(curdir)\/upx\/compile := \$(curdir)\/ucl\/compile/d" tools/Makefile
 sed -i '/# builddir dependencies/a\$(curdir)/upx/compile := $(curdir)/ucl/compile' tools/Makefile
-
-# 修改 argon 主题配置
-sed -i "s/option mode 'normal'/option mode 'light'/g" package/jerrykuku/luci-app-argon-config/root/etc/config/argon-config
-sed -i "s/option bing_background '0'/option bing_background '1'/g" package/jerrykuku/luci-app-argon-config/root/etc/config/argon-config

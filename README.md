@@ -22,8 +22,8 @@
 ## 插件
 
 + luci-app-wolplus
-+ luci-app-advanced-reboot
 + luci-app-arpbind
++ luci-app-openclash
 + luci-app-nginx-manager
 + luci-app-nlbwmon
 + luci-app-samba4
