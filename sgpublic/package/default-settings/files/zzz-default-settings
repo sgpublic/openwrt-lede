@@ -9,20 +9,19 @@ uci set system.@system[0].timezone=CST-8
 uci set system.@system[0].zonename=Asia/Shanghai
 uci commit system
 
-# 解决 daemon.err nlbwmon[2083]: Netlink receive failure: Out of memory
-sed -i '/net.core.rmem_max/d' /etc/sysctl.conf
-echo 'net.core.rmem_max=524288' >> /etc/sysctl.conf
-sed -i '/net.core.rmem_default/d' /etc/sysctl.conf
-echo 'net.core.rmem_default=524288' >> /etc/sysctl.conf
-sysctl -p
-uci set nlbwmon.@nlbwmon[0].database_limit=5000
-uci commit nlbwmon
+# 修改默认密码为 password
+sed -i '/root/d' /etc/shadow
+sed -i 'N;0 i root:$1$vd2nofEE$iszoiPDR5BhLLr5qGkOoL1:19094:0:99999:7:::' /etc/shadow
 
-# 设置 ttyd 启用 ssl
-uci set ttyd.@ttyd[0].ssl=1
-uci set ttyd.@ttyd[0].ssl_cert=/etc/nginx/conf.d/_lan.crt
-uci set ttyd.@ttyd[0].ssl_key=/etc/nginx/conf.d/_lan.key
-uci commit ttyd
+# 添加 hosts
+sed -i '/sgpublic.xyz/d'
+echo '192.168.6.1 opw.sgpublic.xyz' >> /etc/hosts # 路由器首页
+echo '192.168.6.1 qbt.sgpublic.xyz' >> /etc/hosts # qBittorrent Web UI
+echo '192.168.6.1 rclone.sgpublic.xyz' >> /etc/hosts # RCloneNG
+
+# 解决无法使用 ntfs-3g 挂载
+# https://blog.csdn.net/applebomb/article/details/122134067
+ln -s /usr/bin/ntfs-3g /sbin/mount.ntfs
 
 # 设置 OpenWrt 相关信息
 sed -i '/DISTRIB_REVISION/d' /etc/openwrt_release

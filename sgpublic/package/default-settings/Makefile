@@ -19,7 +19,7 @@ define Package/default-settings
   CATEGORY:=LuCI
   TITLE:=LuCI support for Default Settings
   PKGARCH:=all
-  DEPENDS:=+luci-base +luci +@LUCI_LANG_zh-cn
+  DEPENDS:=+luci-base +luci +@LUCI_LANG_zh-cn +luci-nginx +luci-ssl-nginx +luci-ssl-openssl
 endef
 
 define Package/default-settings/description
