@@ -2,7 +2,7 @@
 set -e
 
 REPO_URL='https://git.openwrt.org/openwrt/openwrt.git'
-REPO_BRANCH='v21.02.2'
+REPO_BRANCH='v21.02.3'
 GITHUB_REPOSITORY='SGPublic/openwrt-lede'
 GITHUB_ACTOR='SGPublic'
 CONFIG_FILE='/mnt/e/Documents/GitHub/openwrt-lede/origin.config'
@@ -16,7 +16,6 @@ declare -a _STEP_STACK=(
   Load_Custom_Feeds
   Update_Feeds
   Install_Feeds
-  Openwrt_AutoUpdate
   Load_Custom_Configuration
   Download_Package
   Compile_The_Firmware
@@ -77,7 +76,7 @@ Clone_Source_Code() {
     execute "cd openwrt.bak"
   else
     execute "cd openwrt.bak"
-    execute "git pull"
+    execute "git pull origin $REPO_BRANCH"
   fi
 }
 
@@ -98,22 +97,22 @@ Install_Feeds() {
   execute "./scripts/feeds install -a"
 }
 
-Openwrt_AutoUpdate() {
-  _ZZZ_DEFAULT_SETTINGS='./package/default-settings/files/zzz-default-settings'
-  print_step "Openwrt AutoUpdate"
-  _VERSION_TAG=$(date +"%Y%m%d_%H%M%S_")$(git rev-parse --short HEAD)
-  comfirm "_VERSION_TAG=$_VERSION_TAG\n"
-  runing "sed -i \"/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-  sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-  runing "sed -i \"/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/$GITHUB_REPOSITORY\'\" >> /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-  sed -i "/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/$GITHUB_REPOSITORY\'\" >> /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-  runing "sed -i \"/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-  sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-  runing "sed -i \"/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'$_VERSION_TAG\'\" >> /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-  sed -i "/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'$_VERSION_TAG\'\" >> /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-  runing "sed -i \"s/OpenWrt /$GITHUB_ACTOR compiled ($_VERSION_TAG) \/ OpenWrt /g\" $_ZZZ_DEFAULT_SETTINGS"
-  sed -i "s/OpenWrt /$GITHUB_ACTOR compiled ($_VERSION_TAG) \/ OpenWrt /g" $_ZZZ_DEFAULT_SETTINGS
-}
+# Openwrt_AutoUpdate() {
+#   _ZZZ_DEFAULT_SETTINGS='./package/default-settings/files/zzz-default-settings'
+#   print_step "Openwrt AutoUpdate"
+#   _VERSION_TAG=$(date +"%Y%m%d_%H%M%S_")$(git rev-parse --short HEAD)
+#   comfirm "_VERSION_TAG=$_VERSION_TAG\n"
+#   runing "sed -i \"/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
+#   sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
+#   runing "sed -i \"/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/$GITHUB_REPOSITORY\'\" >> /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
+#   sed -i "/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/$GITHUB_REPOSITORY\'\" >> /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
+#   runing "sed -i \"/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
+#   sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
+#   runing "sed -i \"/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'$_VERSION_TAG\'\" >> /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
+#   sed -i "/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'$_VERSION_TAG\'\" >> /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
+#   runing "sed -i \"s/OpenWrt /$GITHUB_ACTOR compiled ($_VERSION_TAG) \/ OpenWrt /g\" $_ZZZ_DEFAULT_SETTINGS"
+#   sed -i "s/OpenWrt /$GITHUB_ACTOR compiled ($_VERSION_TAG) \/ OpenWrt /g" $_ZZZ_DEFAULT_SETTINGS
+# }
 
 Load_Custom_Configuration() {
   print_step 'Load custom configuration'

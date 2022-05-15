@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+#/init.d/qbtee
+
+START=99
+STOP=15
+
+start() {
+	/usr/bin/qbtee > /dev/null 2>&1 & echo "qbtee is started"
+}
+
+stop() {
+	killall qbtee
+	echo "qbtee is stoped"
+}

@@ -23,7 +23,7 @@ on:
 
 env:
   REPO_URL: https://git.openwrt.org/openwrt/openwrt.git
-  REPO_BRANCH: v21.02.2
+  REPO_BRANCH: v21.02.3
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: origin.config
   DIY_P1_SH: diy-part1.sh
@@ -74,17 +74,6 @@ jobs:
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
-
-    - name: Openwrt AutoUpdate
-      run: |
-        cd openwrt
-        TEMP=$(date +"OpenWrt_%Y%m%d_%H%M%S_")$(git rev-parse --short HEAD)
-        echo "RELEASE_TAG=$TEMP" >> $GITHUB_ENV
-        sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release" package/default-settings/files/zzz-default-settings
-        sed -i "/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/${{github.repository}}\'\" >> /etc/openwrt_release" package/default-settings/files/zzz-default-settings
-        sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release" package/default-settings/files/zzz-default-settings
-        sed -i "/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'${TEMP:8}\'\" >> /etc/openwrt_release" package/default-settings/files/zzz-default-settings
-        sed -i "s/OpenWrt /${{github.actor}} compiled (${TEMP:8}) \/ OpenWrt /g" package/default-settings/files/zzz-default-settings
 
     - name: Load custom configuration
       run: |
@@ -182,7 +171,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.RELEASE_TAG }}
+        tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
 

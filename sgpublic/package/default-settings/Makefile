@@ -19,7 +19,7 @@ define Package/default-settings
   CATEGORY:=LuCI
   TITLE:=LuCI support for Default Settings
   PKGARCH:=all
-  DEPENDS:=+luci-base +luci +@LUCI_LANG_zh-cn +luci-nginx +luci-ssl-nginx +luci-ssl-openssl
+  DEPENDS:=+luci-nginx +luci-ssl-nginx
 endef
 
 define Package/default-settings/description
@@ -32,6 +32,7 @@ endef
 define Package/default-settings/install
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./files/zzz-default-settings $(1)/etc/uci-defaults/99-default-settings
+	$(CP) ./root/* $(1)/
 endef
 
 $(eval $(call BuildPackage,default-settings))

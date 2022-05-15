@@ -14,10 +14,21 @@ if [ "$1" == "--local" ]; then
   set -v
 fi
 
+git_clone() {
+  path=`pwd`
+  if [ -d $2 ]; then
+    cd $2
+    git pull
+    cd $path
+  else
+    git clone $1 $2
+  fi
+}
+
 # 添加软件源 fw876/helloworld
-git clone https://github.com/fw876/helloworld.git package/helloworld
+git_clone https://github.com/fw876/helloworld.git package/helloworld
 # 添加软件源 sundaqiang/openwrt-packages
-git clone https://github.com/sundaqiang/openwrt-packages.git package/sundaqiang
+git_clone https://github.com/sundaqiang/openwrt-packages.git package/sundaqiang
 
 if [ "$1" == "--local" ]; then
   # 本地拉取依赖

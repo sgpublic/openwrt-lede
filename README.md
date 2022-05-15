@@ -22,13 +22,7 @@
 ## 插件
 
 + luci-app-wolplus
-+ luci-app-arpbind
-+ luci-app-openclash
-+ luci-app-nginx-manager
-+ luci-app-nlbwmon
 + luci-app-samba4
-+ luci-app-ttyd
-+ rclone-ng
 + luci-app-ssr-plus
   + NaiveProxy
   + Shadowsocks_Libev_Client

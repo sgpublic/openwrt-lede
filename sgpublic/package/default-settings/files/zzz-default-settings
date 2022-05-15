@@ -13,21 +13,17 @@ uci commit system
 sed -i '/root/d' /etc/shadow
 sed -i 'N;0 i root:$1$vd2nofEE$iszoiPDR5BhLLr5qGkOoL1:19094:0:99999:7:::' /etc/shadow
 
+# 替换 ash 为 bash
+sed -i "s/root:\/root:\/bin\/ash/root:\/root:\/bin\/bash/g" /etc/passwd
+
 # 添加 hosts
 sed -i '/sgpublic.xyz/d'
 echo '192.168.6.1 opw.sgpublic.xyz' >> /etc/hosts # 路由器首页
 echo '192.168.6.1 qbt.sgpublic.xyz' >> /etc/hosts # qBittorrent Web UI
-echo '192.168.6.1 rclone.sgpublic.xyz' >> /etc/hosts # RCloneNG
 
 # 解决无法使用 ntfs-3g 挂载
 # https://blog.csdn.net/applebomb/article/details/122134067
 ln -s /usr/bin/ntfs-3g /sbin/mount.ntfs
-
-# 设置 OpenWrt 相关信息
-sed -i '/DISTRIB_REVISION/d' /etc/openwrt_release
-echo "DISTRIB_REVISION='Official'" >> /etc/openwrt_release
-sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
-echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
 
 # 减少 dnsmasq 的 log 输出
 sed -i '/log-facility/d' /etc/dnsmasq.conf
