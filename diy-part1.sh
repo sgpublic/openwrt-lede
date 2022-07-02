@@ -21,6 +21,7 @@ git_clone() {
     git pull
     cd $path
   else
+    mkdir -p "$2"
     git clone $1 $2
   fi
 }
@@ -32,23 +33,14 @@ git_clone https://github.com/sundaqiang/openwrt-packages.git package/sundaqiang
 
 if [ "$1" == "--local" ]; then
   # 本地拉取依赖
-  cp -r /mnt/e/Documents/Github/openwrt-lede/sgpublic/* ./
+  rm -rf package/sgpublic && mkdir -p package/sgpublic
+  cp -r /mnt/e/Documents/Github/openwrt-packages/* package/sgpublic
 else
-  # 拉取 default-settings
-  svn co https://github.com/sgpublic/openwrt-lede/trunk/sgpublic/package/default-settings package/default-settings
-
-  # 为 luci-app-ssr-plus 拉取依赖
-  svn co https://github.com/sgpublic/openwrt-lede/trunk/sgpublic/tools tools
-  svn co https://github.com/sgpublic/openwrt-lede/trunk/sgpublic/package/net package/net
+  # 添加软件源 sgpublic/openwrt-packages
+  git_clone https://github.com/sgpublic/openwrt-packages.git package/sgpublic
 fi
 
 # 拉取主题 luci-theme-argon
-rm -rf package/jerrykuku/luci-theme-argon
-svn co https://github.com/jerrykuku/luci-theme-argon/trunk package/jerrykuku/luci-theme-argon
+git_clone https://github.com/jerrykuku/luci-theme-argon.git package/jerrykuku/luci-theme-argon
 # 拉取插件 luci-app-argon-config
-rm -rf package/jerrykuku/luci-app-argon-config
-svn co https://github.com/jerrykuku/luci-app-argon-config/trunk package/jerrykuku/luci-app-argon-config
-
-# 拉取插件 luci-app-filebrowser
-rm -rf package/sgpublic/luci-app-filebrowser
-svn co https://github.com/sgpublic/luci-app-filebrowser/trunk package/sgpublic/luci-app-filebrowser
+git_clone https://github.com/jerrykuku/luci-app-argon-config.git package/jerrykuku/luci-app-argon-config

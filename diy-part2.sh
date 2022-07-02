@@ -15,6 +15,10 @@ if [ "$1" == "--local" ]; then
   set -v
 fi
 
+# 修改标准目录
+sed -i 's/$(TOPDIR)\/staging_dir/\/tmp\/openwrt\/staging_dir/g' rules.mk
+sed -i 's/$(TOPDIR)\/build_dir/\/tmp\/openwrt\/build_dir/g' rules.mk
+
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.6.1/g' package/base-files/files/bin/config_generate
 # 修改默认主题
@@ -24,10 +28,4 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci-s
 
 # 删除 uhttpd
 sed -i 's/+uhttpd //g' feeds/luci/collections/luci/Makefile
-sed -i 's/+uhttpd-mod-ubus  //g' feeds/luci/collections/luci/Makefile
-
-# 添加 tools/ucl 和 tools/upx
-sed -i '/tools-y += ucl upx/d' tools/Makefile
-sed -i '/tools-y :=/a\tools-y += ucl upx' tools/Makefile
-sed -i "/\$(curdir)\/upx\/compile := \$(curdir)\/ucl\/compile/d" tools/Makefile
-sed -i '/# builddir dependencies/a\$(curdir)/upx/compile := $(curdir)/ucl/compile' tools/Makefile
+sed -i 's/+uhttpd-mod-ubus //g' feeds/luci/collections/luci/Makefile

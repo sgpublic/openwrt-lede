@@ -2,7 +2,7 @@
 set -e
 
 REPO_URL='https://git.openwrt.org/openwrt/openwrt.git'
-REPO_BRANCH='v21.02.3'
+REPO_BRANCH='v22.03.0-rc4'
 GITHUB_REPOSITORY='SGPublic/openwrt-lede'
 GITHUB_ACTOR='SGPublic'
 CONFIG_FILE='/mnt/e/Documents/GitHub/openwrt-lede/origin.config'
@@ -20,7 +20,6 @@ declare -a _STEP_STACK=(
   Download_Package
   Compile_The_Firmware
   Organize_Files
-  Post_Toolchain_Cache
   Upload_Firmware_To_Release
 )
 
@@ -52,9 +51,11 @@ main() {
     comfirm "Do you want to use cache? If you select No, the cache will be deleted. (Y/n)"
     read _need
     if [[ "$_need" =~ ^[nN]$ ]]; then
-      execute "rm -rf openwrt.bak"
+      execute "rm -rf ./openwrt.bak"
     fi
   fi
+
+  execute "mkdir -p /tmp/openwrt"
 
   for _element in ${_STEP_STACK[@]}; do
     $_element
@@ -72,12 +73,21 @@ Clone_Source_Code() {
   execute "rm -rf openwrt"
 
   if [ ! -d 'openwrt.bak' ]; then
-    execute "git clone $REPO_URL -b $REPO_BRANCH openwrt.bak"
+    execute "git clone -b $REPO_BRANCH $REPO_URL openwrt.bak"
     execute "cd openwrt.bak"
+    if [ ! -d "staging_dir" ]; then
+      execute "mkdir -p /tmp/openwrt/staging_dir"
+      execute "ln -s /tmp/openwrt/staging_dir ./"
+    fi
+    if [ ! -d "build_dir" ]; then
+      execute "mkdir -p /tmp/openwrt/build_dir"
+      execute "ln -s /tmp/openwrt/build_dir ./"
+    fi
   else
     execute "cd openwrt.bak"
     execute "git pull origin $REPO_BRANCH"
   fi
+  execute "rm -rf $_tmp_sdk"
 }
 
 Load_Custom_Feeds() {
@@ -97,23 +107,6 @@ Install_Feeds() {
   execute "./scripts/feeds install -a"
 }
 
-# Openwrt_AutoUpdate() {
-#   _ZZZ_DEFAULT_SETTINGS='./package/default-settings/files/zzz-default-settings'
-#   print_step "Openwrt AutoUpdate"
-#   _VERSION_TAG=$(date +"%Y%m%d_%H%M%S_")$(git rev-parse --short HEAD)
-#   comfirm "_VERSION_TAG=$_VERSION_TAG\n"
-#   runing "sed -i \"/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-#   sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-#   runing "sed -i \"/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/$GITHUB_REPOSITORY\'\" >> /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-#   sed -i "/DISTRIB_GITHUB/a\echo \"DISTRIB_GITHUB=\'https://github.com/$GITHUB_REPOSITORY\'\" >> /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-#   runing "sed -i \"/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-#   sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_VERSIONS/d' /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-#   runing "sed -i \"/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'$_VERSION_TAG\'\" >> /etc/openwrt_release\" $_ZZZ_DEFAULT_SETTINGS"
-#   sed -i "/DISTRIB_VERSIONS/a\echo \"DISTRIB_VERSIONS=\'$_VERSION_TAG\'\" >> /etc/openwrt_release" $_ZZZ_DEFAULT_SETTINGS
-#   runing "sed -i \"s/OpenWrt /$GITHUB_ACTOR compiled ($_VERSION_TAG) \/ OpenWrt /g\" $_ZZZ_DEFAULT_SETTINGS"
-#   sed -i "s/OpenWrt /$GITHUB_ACTOR compiled ($_VERSION_TAG) \/ OpenWrt /g" $_ZZZ_DEFAULT_SETTINGS
-# }
-
 Load_Custom_Configuration() {
   print_step 'Load custom configuration'
   execute "cp $CONFIG_FILE ./.config"
@@ -125,26 +118,27 @@ Download_Package() {
   comfirm "Do you need to change the config file? (y/N)"
   read _need
   if [[ "$_need" =~ ^[yY]$ ]]; then
-    runing "make menuconfig -j$THREAD || make menuconfig -j1 || make menuconfig -j1 V=s"
-    make menuconfig -j$THREAD || make menuconfig -j1 || make menuconfig -j1 V=s
+    runing "make menuconfig -j$THREAD"
+    make menuconfig -j$THREAD || make menuconfig V=s
   else
-    runing "make defconfig -j$THREAD || make defconfig -j1 || make defconfig -j1 V=s"
-    make defconfig -j$THREAD || make defconfig -j1 || make defconfig -j1 V=s
+    runing "make defconfig -j$THREAD"
+    make defconfig -j$THREAD || make defconfig V=s
   fi
   mkdir -p $OUTPUT_DIR
   execute "cp ./.config $OUTPUT_DIR/"
-  runing "make download -j$THREAD || make download -j1 || make download -j1 V=s"
-  make download -j$THREAD || make download -j1 || make download -j1 V=s
-  runing "find dl -size -1024c -exec ls -l {} \;"
-  find dl -size -1024c -exec ls -l {} \;
-  runing "find dl -size -1024c -exec rm -f {} \;"
-  find dl -size -1024c -exec rm -f {} \;
+  runing "make download -j$THREAD"
+  make download -j$THREAD
+  execute "rm -rf /tmp/openwrt/download/go-mod-cache"
+  runing "find /tmp/openwrt/download -size -1024c -exec ls -l {} \;"
+  find /tmp/openwrt/download -size -1024c -exec ls -l {} \;
+  runing "find /tmp/openwrt/download -size -1024c -exec rm -f {} \;"
+  find /tmp/openwrt/download -size -1024c -exec rm -f {} \;
 }
 
 Compile_The_Firmware() {
   print_step 'Compile the firmware'
-  runing "make -j$THREAD || make -j1 || make -j1 V=s"
-  make -j$THREAD || make -j1 || make -j1 V=s
+  runing "make -j$THREAD || make V=s"
+  make -j$THREAD || make V=s
 }
 
 Organize_Files() {
@@ -152,15 +146,6 @@ Organize_Files() {
   mkdir -p $OUTPUT_DIR
   execute "rm -rf $BIN_OUT_DIR/bin/"
   execute "rm -rf ./bin/targets/*/*/packages"
-}
-
-Post_Toolchain_Cache() {
-  print_step 'Post Toolchain Cache'
-  _caches=(".ccache" "build_dir" "staging_dir")
-  for _cache in "${_caches[@]}"; do
-    execute "rm -rf ../openwrt.bak/${_caches[$_cache]}"
-    execute "cp -r ./${_caches[$_cache]} ../openwrt.bak/"
-  done
 }
 
 Upload_Firmware_To_Release() {
