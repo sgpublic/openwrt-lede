@@ -160,7 +160,8 @@ Organize_Files() {
 
 Upload_Firmware_To_Release() {
   print_step 'Upload firmware to release'
-  mkdir -p $OUTPUT_DIR
+  runing "mkdir -p $OUTPUT_DIR/bin"
+  mkdir -p $OUTPUT_DIR/bin
   execute "cp -r /tmp/openwrt/binary/targets/*/*/* $OUTPUT_DIR/bin/"
 }
 
