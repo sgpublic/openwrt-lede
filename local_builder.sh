@@ -5,11 +5,11 @@ REPO_URL='https://git.openwrt.org/openwrt/openwrt.git'
 REPO_BRANCH='v22.03.0-rc4'
 GITHUB_REPOSITORY='SGPublic/openwrt-lede'
 GITHUB_ACTOR='SGPublic'
-CONFIG_FILE='/mnt/e/Documents/GitHub/openwrt-lede/origin.config'
-DIY_P1_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part1.sh'
-DIY_P2_SH='/mnt/e/Documents/GitHub/openwrt-lede/diy-part2.sh'
+CONFIG_FILE='/mnt/e/Documents/OpenWrt/openwrt-lede/origin.config'
+DIY_P1_SH='/mnt/e/Documents/OpenWrt/openwrt-lede/diy-part1.sh'
+DIY_P2_SH='/mnt/e/Documents/OpenWrt/openwrt-lede/diy-part2.sh'
 THREAD=12
-OUTPUT_DIR='/mnt/e/Documents/GitHub/openwrt-lede/local'
+OUTPUT_DIR='/mnt/e/Documents/OpenWrt/openwrt-lede/local'
 
 declare -a _STEP_STACK=(
   Clone_Source_Code
@@ -42,16 +42,26 @@ main() {
 
   if [[ "$_need" =~ ^[yY]$ ]]; then
     execute "sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc"
-    execute "sudo apt-get update -y"
-    execute "sudo apt-get install $(curl -fsSL git.io/depends-ubuntu-2004) -y"
-    execute "sudo apt-get clean"
+    execute "sudo apt update -y"
+    execute "sudo apt upgrade -y"
+    # execute "sudo apt install build-essential gawk gcc-multilib flex git gettext libncurses5-dev libssl-dev python3-distutils zlib1g-dev"
+    execute "sudo apt install $(curl -fsSL git.io/depends-ubuntu-2004) -y"
+    execute "sudo apt clean"
   fi
 
   if [ -d 'openwrt.bak' ]; then
-    comfirm "Do you want to use cache? If you select No, the cache will be deleted. (Y/n)"
+    comfirm "Do you want to use git cache? If you select No, ite will be deleted. (Y/n)"
     read _need
     if [[ "$_need" =~ ^[nN]$ ]]; then
       execute "rm -rf ./openwrt.bak"
+    fi
+  fi
+
+  if [ -d '/tmp/openwrt' ]; then
+    comfirm "Do you want to use build cache? If you select No, it will be deleted. (Y/n)"
+    read _need
+    if [[ "$_need" =~ ^[nN]$ ]]; then
+      execute "rm -rf /tmp/openwrt"
     fi
   fi
 
@@ -75,12 +85,12 @@ Clone_Source_Code() {
   if [ ! -d 'openwrt.bak' ]; then
     execute "git clone -b $REPO_BRANCH $REPO_URL openwrt.bak"
     execute "cd openwrt.bak"
+    execute "mkdir -p /tmp/openwrt/staging_dir"
     if [ ! -d "staging_dir" ]; then
-      execute "mkdir -p /tmp/openwrt/staging_dir"
       execute "ln -s /tmp/openwrt/staging_dir ./"
     fi
+    execute "mkdir -p /tmp/openwrt/build_dir"
     if [ ! -d "build_dir" ]; then
-      execute "mkdir -p /tmp/openwrt/build_dir"
       execute "ln -s /tmp/openwrt/build_dir ./"
     fi
   else
@@ -144,14 +154,14 @@ Compile_The_Firmware() {
 Organize_Files() {
   print_step 'Organize files'
   mkdir -p $OUTPUT_DIR
-  execute "rm -rf $BIN_OUT_DIR/bin/"
-  execute "rm -rf ./bin/targets/*/*/packages"
+  execute "rm -rf $OUTPUT_DIR/bin/"
+  execute "rm -rf /tmp/openwrt/binary/targets/*/*/packages"
 }
 
 Upload_Firmware_To_Release() {
   print_step 'Upload firmware to release'
   mkdir -p $OUTPUT_DIR
-  execute "cp -r ./bin/targets/*/*/ $OUTPUT_DIR/bin/"
+  execute "cp -r /tmp/openwrt/binary/targets/*/*/* $OUTPUT_DIR/bin/"
 }
 
 main

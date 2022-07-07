@@ -34,7 +34,7 @@ git_clone https://github.com/sundaqiang/openwrt-packages.git package/sundaqiang
 if [ "$1" == "--local" ]; then
   # 本地拉取依赖
   rm -rf package/sgpublic && mkdir -p package/sgpublic
-  cp -r /mnt/e/Documents/Github/openwrt-packages/* package/sgpublic
+  cp -r /mnt/e/Documents/OpenWrt/openwrt-packages/* package/sgpublic
 else
   # 添加软件源 sgpublic/openwrt-packages
   git_clone https://github.com/sgpublic/openwrt-packages.git package/sgpublic
