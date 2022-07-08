@@ -35,9 +35,13 @@ if [ "$1" == "--local" ]; then
   # 本地拉取依赖
   rm -rf package/sgpublic && mkdir -p package/sgpublic
   cp -r /mnt/e/Documents/OpenWrt/openwrt-packages/* package/sgpublic
+  rm -rf package/little-paimon && mkdir -p package/little-paimon
+  cp -r /mnt/e/Documents/OpenWrt/packages-little-paimon/* package/little-paimon
 else
   # 添加软件源 sgpublic/openwrt-packages
   git_clone https://github.com/sgpublic/openwrt-packages.git package/sgpublic
+  # 添加软件源 sgpublic/packages-little-paimon
+  git_clone https://github.com/sgpublic/packages-little-paimon.git package/little-paimon
 fi
 
 # 拉取主题 luci-theme-argon
