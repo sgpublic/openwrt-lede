@@ -23,7 +23,7 @@ on:
 
 env:
   REPO_URL: https://git.openwrt.org/openwrt/openwrt.git
-  REPO_BRANCH: v22.03.0-rc4
+  REPO_BRANCH: v22.03.0-rc5
   CONFIG_FILE: origin.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
