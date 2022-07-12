@@ -61,7 +61,9 @@ main() {
     comfirm "Do you want to use build cache? If you select No, it will be deleted. (Y/n)"
     read _need
     if [[ "$_need" =~ ^[nN]$ ]]; then
-      execute "rm -rf /tmp/openwrt"
+      execute "rm -rf /tmp/openwrt/build_dir"
+      execute "rm -rf /tmp/openwrt/staging_dir"
+      execute "rm -rf /tmp/openwrt/binary"
     fi
   fi
 
